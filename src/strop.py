@@ -3,6 +3,7 @@ from io import say
 from io import inline_print
 from collections import deque
 from collections import Counter
+from hashf import fnv_hash
 
 _rare_ = '<?>'
 _buffer_ = '<*>'
@@ -99,7 +100,7 @@ def decide_vocab(unigrams, cutoff, vocab_size, want):
         
     return vocab, outfname
 
-def extract_stat(corpus, vocab, stat, window):
+def extract_stat(corpus, vocab, stat, window, hash_width = 32):
     stat += '.window' + str(window)    
     assert(os.path.isfile(corpus))
     
@@ -111,15 +112,14 @@ def extract_stat(corpus, vocab, stat, window):
         if q[center] == _buffer_: return
         token = q[center] if q[center] in vocab else _rare_
         Xcount[token] += 1
+        friend = ''
         for i in range(window):
             if i != center:
                 if q[i] == _buffer_: continue
-                friend = q[i] if q[i] in vocab else _rare_
-                rel_position = i-center
-                position_marker = '<+'+str(rel_position)+'>' if rel_position > 0 else '<'+str(rel_position)+'>'
-                friend += position_marker
-                XYcount[(token, friend)] += 1
-                Ycount[friend] += 1
+                friend += q[i] if q[i] in vocab else _rare_
+        friend_hashv = fnv_hash(friend, hash_width)
+        XYcount[(token, friend_hashv)] += 1
+        Ycount[friend_hashv] += 1
             
     num_tok = 0
     q = deque([_buffer_ for _ in range(window-1)], window)

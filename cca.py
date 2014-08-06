@@ -18,7 +18,8 @@ def main(args):
         if args.rewrite: 
             rewrite_corpus(args.corpus, vocab, outfname)
         else:
-            extract_stat(args.corpus, vocab, outfname, args.window)
+            extract_stat(args.corpus, vocab, outfname, args.window,
+                    args.hash_width)
     
     if args.stat:
         assert(args.m is not None and args.kappa is not None)
@@ -43,6 +44,10 @@ if __name__=='__main__':
     argparser.add_argument('--cutoff',
                            type=int,
                            help='cut off words appearing <= this number')
+    argparser.add_argument('--hash_width',
+                           type=int,
+                           default=32
+                           help='bit with of the context hash function')
     argparser.add_argument('--vocab', 
                            type=int, 
                            help='size of the vocabulary')    
