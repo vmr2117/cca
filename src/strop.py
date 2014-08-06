@@ -115,8 +115,12 @@ def extract_stat(corpus, vocab, stat, window, hash_width = 32):
         friend = ''
         for i in range(window):
             if i != center:
-                if q[i] == _buffer_: continue
-                friend += q[i] if q[i] in vocab else _rare_
+                if q[i] != _buffer_:
+                    friend += q[i] if q[i] in vocab else _rare_
+                rel_pos = i - center
+                pos_marker = ('<+'+str(rel_pos)+'>' if rel_pos > 0 else
+                                '<'+str(rel_pos)+'>')
+                friend += pos_marker
         friend_hashv = fnv_hash(friend, hash_width)
         XYcount[(token, friend_hashv)] += 1
         Ycount[friend_hashv] += 1
