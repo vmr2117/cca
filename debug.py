@@ -1,7 +1,7 @@
 import os
 import sys
-#from src.call_matlab import call_matlab
-#from src.canon import canon
+from src.call_matlab import call_matlab
+from src.canon import canon
 from src.io import clean
 from src.io import set_quiet
 from src.strop import count_unigrams
@@ -121,7 +121,6 @@ gold_XYcount = {
 
 stat = check()
 
-"""
 # Check if the result of python sparsesvd agrees with the result of Matlab.
 m = 2
 kappa = 1
@@ -142,4 +141,3 @@ for i in range(len(C.sv)): assert(abs(C.sv[i] - sv_matlab[i]) < 1e-10)
 sys.stderr.write('Correctness of statistics and svd calculations verified.\n')
 sys.stderr.write('Cleaning.\n')
 clean()
-"""
