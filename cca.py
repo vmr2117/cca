@@ -46,7 +46,7 @@ if __name__=='__main__':
                            help='cut off words appearing <= this number')
     argparser.add_argument('--hash_width',
                            type=int,
-                           default=32
+                           default=32,
                            help='bit with of the context hash function')
     argparser.add_argument('--vocab', 
                            type=int, 
