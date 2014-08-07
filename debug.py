@@ -25,11 +25,11 @@ def check():
     for y in Ycount: assert(Ycount[y] == gold_Ycount[y])
     for x, y in XYcount: assert(XYcount[x,y] == gold_XYcount[x,y])
     return stat 
-
 # Case 1: cutoff = 0, window = 2
 cutoff = 0
 window = 2
 
+"""
 gold_Xcount = {'the': 4, 
                'dog': 2, 
                'cat': 2, 
@@ -59,41 +59,36 @@ gold_XYcount = {('the',5913259): 2,
                 }
 
 check()
-
-"""
 # Case 2: cutoff = 0, window = 3
 window = 3
-gold_Ycount = {1629941536: 1, #barked<-1>cat<+1> 
-               4258337121: 1, #the<-1>barked<+1> 
-               1709965227: 1, #the<-1>meowed<+1> 
-               717415781: 1, #cat<-1><+1> 
-               3659331337: 1, #the<-1>the<+1>
-               2849308011: 1, #<-1>dog<+1> 
-               534602925: 1, #cat<-1>dog<+1> 
-               2099651598: 2, #dog<-1>the<+1> 
-               140453619: 1, #the<-1>saw<+1> 
-               2772153976: 1 #saw<-1>cat<+1>
+gold_Ycount = {2551617: 1, #barked<-1>cat<+1> 
+               13701532: 1, #the<-1>barked<+1> 
+               15466446: 1, #the<-1>meowed<+1> 
+               12772687: 1, #cat<-1><+1> 
+               1898451: 1, #the<-1>the<+1>
+               13958594: 1, #<-1>dog<+1> 
+               14509234: 1, #cat<-1>dog<+1> 
+               2499699: 2, #dog<-1>the<+1> 
+               6235899: 1, #the<-1>saw<+1> 
+               3913437: 1 #saw<-1>cat<+1>
                }
-# proceed from here.
-gold_XYcount = {('dog','the<-1>'): 2, 
-                ('cat','the<-1>'): 2,
-                ('saw','the<+1>'): 1, 
-                ('cat','the<+1>'): 1,
-                ('barked','the<+1>'): 1, 
-                ('saw','dog<-1>'): 1, 
-                ('barked','dog<-1>'): 1, 
-                ('the','dog<+1>'): 2,
-                ('the','saw<-1>'): 1, 
-                ('dog','saw<+1>'): 1, 
-                ('the','cat<-1>'): 1, 
-                ('meowed','cat<-1>'): 1,
-                ('the','cat<+1>'): 2,
-                ('the', 'barked<-1>'): 1, 
-                ('dog','barked<+1>'): 1,
-                ('cat','meowed<+1>'):1 
+
+gold_XYcount = {
+                ('the',13958594):1, #<-1>dog<+1>
+                ('dog',6235899):1, #the<-1>saw<+1>
+                ('saw',2499699):1, #dog<-1>the<+1>
+                ('the',3913437):1, #saw<-1>cat<+1>
+                ('cat',1898451):1, #the<-1>the<+1>
+                ('the',14509234):1, #cat<-1>dog<+1>
+                ('dog',13701532):1, #the<-1>barked<+1>
+                ('barked',2499699):1, #dog<-1>the<+1>
+                ('the',2551617):1, #barked<-1>cat<+1>
+                ('cat',15466446):1, #the<-1>meowed<+1>
+                ('meowed',12772687):1 #cat<-1><+1>
                 }
 
 check()
+"""
 
 # Case 3: cutoff = 1, window = 3
 cutoff = 1
@@ -104,32 +99,29 @@ gold_Xcount = {'the': 4,
                '<?>': 3
                }
 
-gold_Ycount = {'the<-1>': 4, 
-               'the<+1>': 3, 
-               'dog<-1>': 2, 
-               'dog<+1>': 2, 
-               'cat<-1>': 2, 
-               'cat<+1>': 2, 
-               '<?><-1>': 2, 
-               '<?><+1>': 3
+gold_Ycount = {8655437: 2, #<?><-1>cat<+1> 
+               13711174: 3, #the<-1><?><+1> 
+               12772687: 1, #cat<-1><+1> 
+               1898451: 1, #the<-1>the<+1>
+               13958594: 1, #<-1>dog<+1> 
+               14509234: 1, #cat<-1>dog<+1> 
+               2499699: 2, #dog<-1>the<+1> 
                }
 
-gold_XYcount = {('dog','the<-1>'): 2, 
-                ('cat','the<-1>'): 2, 
-                ('<?>','the<+1>'): 2, 
-                ('cat','the<+1>'): 1,
-                ('<?>','dog<-1>'): 2, 
-                ('the','dog<+1>'): 2, 
-                ('the','<?><-1>'): 2, 
-                ('dog','<?><+1>'): 2, 
-                ('the','cat<-1>'): 1, 
-                ('<?>','cat<-1>'): 1, 
-                ('the','cat<+1>'): 2, 
-                ('cat','<?><+1>'): 1
+gold_XYcount = {
+                ('the',13958594):1, #<-1>dog<+1>
+                ('dog',13711174):2, #the<-1><?><+1>
+                ('<?>',2499699):2, #dog<-1>the<+1>
+                ('the',8655437):2, #<?><-1>cat<+1>
+                ('cat',1898451):1, #the<-1>the<+1>
+                ('the',14509234):1, #cat<-1>dog<+1>
+                ('cat',13711174):1, #the<-1><?><+1>
+                ('<?>',12772687):1 #cat<-1><+1>
                 }
 
 stat = check()
 
+"""
 # Check if the result of python sparsesvd agrees with the result of Matlab.
 m = 2
 kappa = 1
