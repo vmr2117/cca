@@ -101,7 +101,7 @@ def decide_vocab(unigrams, cutoff, vocab_size, want):
     return vocab, outfname
 
 def extract_stat(corpus, vocab, stat, window, hash_width = 32):
-    stat += '.window' + str(window)    
+    stat += '.window' + str(window) + '.hashbits' + str(hash_width)    
     assert(os.path.isfile(corpus))
     
     XYcount = Counter()

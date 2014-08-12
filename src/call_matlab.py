@@ -6,7 +6,7 @@ from io import read_freqmap
 from io import say
 
 # change it as needed to point to the matlab executable on your machine 
-matlab = '/usr/local/MATLAB/R2013a/bin/matlab' 
+matlab = '/usr/local/bin/matlab' 
 
 def call_matlab(stat, m, kappa):
     assert(m is not None and kappa is not None)
