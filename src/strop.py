@@ -3,6 +3,7 @@ from io import say
 from io import inline_print
 from collections import deque
 from collections import Counter
+from collections import defaultdict
 from hashf import fnv_hash
 
 _rare_ = '<?>'
@@ -107,6 +108,7 @@ def extract_stat(corpus, vocab, stat, window, hash_width = 32):
     XYcount = Counter()
     Xcount = Counter()
     Ycount = Counter()
+    CollisionCount = defaultdict(set)
     def inc_stats(q):
         center = (window - 1) / 2 # position of the current token
         if q[center] == _buffer_: return
@@ -122,6 +124,7 @@ def extract_stat(corpus, vocab, stat, window, hash_width = 32):
                                 '<'+str(rel_pos)+'>')
                 friend += pos_marker
         friend_hashv = fnv_hash(friend, hash_width)
+        CollisionCount[friend_hashv].add(friend)
         XYcount[(token, friend_hashv)] += 1
         Ycount[friend_hashv] += 1
             
@@ -144,7 +147,10 @@ def extract_stat(corpus, vocab, stat, window, hash_width = 32):
         q.append(_buffer_)
         inc_stats(q)
     
-
+    collisions = 0
+    for key, value in CollisionCount.iteritems():
+        if len(value) > 1: collisions += len(value)
+    say('Collisions: {}'.format(collisions))
     say('Creating directory {}'.format(stat))
     if not os.path.exists(stat): os.makedirs(stat)                
     xi, yi = {}, {}
