@@ -1,9 +1,16 @@
 from numpy.random import randn
+import scipy.linalg.interpolative as id
+from scipy.sparse.linalg import aslinearoperator
 from scipy.linalg import qr
 from scipy.linalg import svd
 from scipy.sparse import csc_matrix
 from numpy import allclose, outer
 from sparsesvd import sparsesvd
+
+def id_svd(sparsematrix, m):
+    linear_op=aslinearoperator(sparsematrix)
+    U, S, V =id.svd(linear_op, m)
+    return U, S, V
 
 def mysparsesvd(sparsematrix, m):
     Ut, S, Vt = sparsesvd(sparsematrix, m)

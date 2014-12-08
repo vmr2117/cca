@@ -7,7 +7,7 @@ from io import wc_l
 from io import inline_print
 from io import write_row
 from io import complete_path
-from svd import mysparsesvd
+from svd import id_svd
 from numpy import array
 from numpy.linalg import norm
 from scipy.sparse import csc_matrix
@@ -137,7 +137,7 @@ class canon(object):
                  .format(Omega.shape[0], Omega.shape[1], Omega.nnz))
         self.rec('Computing {} left singular vectors U of Omega...'
                  .format(self.m))
-        self.U, self.sv, _ = mysparsesvd(Omega, self.m)
+        self.U, self.sv, self.V = id_svd(Omega, self.m)
         for i in range(self.U.shape[0]): self.U[i,:] /= norm(self.U[i,:])
     
     def write_result(self):
