@@ -8,9 +8,8 @@ from numpy import allclose, outer
 from sparsesvd import sparsesvd
 
 def id_svd(sparsematrix, m):
-    linear_op=aslinearoperator(sparsematrix)
-    U, S, V =id.svd(linear_op, m)
-    return U, S, V
+    linear_op = aslinearoperator(sparsematrix)
+    return id.svd(linear_op, m)
 
 def mysparsesvd(sparsematrix, m):
     Ut, S, Vt = sparsesvd(sparsematrix, m)

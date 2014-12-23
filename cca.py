@@ -23,7 +23,14 @@ def main(args):
     
     if args.stat:
         assert(args.m is not None and args.kappa is not None)
-        if args.no_matlab:        
+	if args.omega_fmat:
+            C = canon()
+            C.set_params(args.m, args.kappa)     
+            C.get_stat(args.stat)
+            C.start_logging()
+	    C.save_omega(args.omega_fmat)
+            C.end_logging()
+        elif args.no_matlab:        
             C = canon()
             C.set_params(args.m, args.kappa)     
             C.get_stat(args.stat)
@@ -79,6 +86,9 @@ if __name__=='__main__':
     argparser.add_argument('--no_matlab', 
                            action='store_true', 
                            help='do not call matlab - use python sparsesvd')
+    argparser.add_argument('--omega_fmat', 
+                           help='compute and save omega for fortran processing.', default=None, type=str)
+    
     args = argparser.parse_args()
     main(args)
     

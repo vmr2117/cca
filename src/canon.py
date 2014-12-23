@@ -8,9 +8,9 @@ from io import inline_print
 from io import write_row
 from io import complete_path
 from svd import id_svd
-from numpy import array
+from numpy import array, savetxt
 from numpy.linalg import norm
-from scipy.sparse import csc_matrix
+from scipy.sparse import csc_matrix, csr_matrix
 from collections import Counter
 
 _rare_ = '<?>'
@@ -118,7 +118,19 @@ class canon(object):
         self.rec('Total time: ' + str(self.end_time - self.start_time)) 
         self.logf.close()
 
-    def approx_cca(self):        
+    def save_csr_fmat(self, csr_matrix, filename):
+        fileh = open(filename,'w')
+        shape = ','.join(map(str,csr_mat.shape))
+        fileh.write(shape+"\n")
+        fileh.write(str(csr_mat.data.size)+"\n")
+        savetxt(fileh, csr_mat.data)
+        fileh.write(str(csr_mat.indices.size)+"\n")
+        savetxt(fileh, csr_mat.indices + 1, fmt='%i')
+        fileh.write(str(csr_mat.indptr.size)+"\n")
+        savetxt(fileh, csr_mat.indptr + 1 , fmt='%i')
+        fileh.close()
+
+    def prep_omega(self):
         def compute_invsqrt_diag_cov(count, kappa, num_samples):
             p1 = (count + kappa) / float(num_samples) 
             diags = [i for i in range(len(count))]
@@ -132,13 +144,27 @@ class canon(object):
                                                 self.kappa, self.num_samples)
         Omega = float(1./self.num_samples) * \
             invsqrt_covX * self.countXY * invsqrt_covY # still sparse
+	return Omega
+
+    def save_omega(self, filename):
+	csr_mat = csr_matrix(prep_omega(Omega))
+	save_csr_fmat(csr_mat, filename)	
+
+    def approx_cca(self):        
+	Omega = prep_omega()
         
         self.rec('Omega: dimensions {} x {}, {} nonzeros'
                  .format(Omega.shape[0], Omega.shape[1], Omega.nnz))
         self.rec('Computing {} left singular vectors U of Omega...'
                  .format(self.m))
         self.U, self.sv, self.V = id_svd(Omega, self.m)
-        for i in range(self.U.shape[0]): self.U[i,:] /= norm(self.U[i,:])
+	count = 0
+        for i in range(self.U.shape[0]): 
+	    norm2 = norm(self.U[i,:])
+	    if norm2 > 0 :
+		self.U[i,:] /= norm2
+	    else: count += 1
+	print "Number zero left singular vectors:", count
     
     def write_result(self):
         self.write_sv()
